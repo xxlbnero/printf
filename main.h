@@ -1,6 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+
 #include <stdio.h>	/* printf, etc*/
 #include <limits.h>	/* INT_MAX, etc */
 #include <stdlib.h>	/* malloc() */
@@ -11,6 +12,6 @@
 int _putchar(int c);
 int _printf(const char *format, ...);
 
+#endif /* MAIN_H */
 
 
-#endif	/* MAIN_H */

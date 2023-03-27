@@ -1,19 +1,4 @@
 #include "main.h"
-
-/**
- * _printf - Prints output according to a format.
- *
- * @format: A string containing zero or more directives to print.
- * @...: Variable arguments to be printed according to format.
- *
- * Return: The number of characters printed.
- */
-int _printf(const char *format, ...)
-{
-    /* TODO: Implement the printf function. */
-    return (0);
-}
-#include "main.h"
 #include <stdarg.h>
 
 /**
@@ -72,6 +57,28 @@ int _printf(const char *format, ...)
  */
 int handle_format_specifier(const char *format, int pos, va_list *args, char *buffer)
 {
-    /* TODO: Implement the handle_format_specifier function. */
-    return (0);
+	int num_char;
+
+	switch (format[pos])
+	{
+		case 'd':
+			num_char = sprintf(buffer, "%d", va_ag(args, int));
+			break;
+		case 'f':
+			num_char = sprintf(buffer, "%f", va_arg(*args, double));
+			break;
+		case 's':
+			num_char = sprintf(buffer, "%s", va_arg(*args, char *));
+			break;
+		case 'c':
+			buffer[0] = va_arg(*args, int);
+			buffer[1] = '\0';
+			num_char = 1;
+			break;
+		default:
+			// unknown spec
+			break;
+	}
+
+	return (num_char);
 }

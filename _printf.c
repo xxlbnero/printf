@@ -12,37 +12,35 @@
 int _printf(const char *format, ...)
 {
 	int i = 0, j = 0, len = 0;
-    	va_list args;
-    	char buffer[1024];
+	va_list args;
+	char buffer[1024];
 
-    	if (format == NULL)
-        	return (-1);
+	if (format == NULL)
+		return (-1);
+	va_start(args, format);
 
-    	va_start(args, format);
+	while (format[i])
+	{
+		if (format[i] == '%')
+		{
+			j = handle_format_specifier(format, i + 1, &args, buffer);
+			if (j == -1)
+				return (-1);
+			len += j;
+			i++;
+		}
+		else
+		{
+			buffer[len++] = format[i];
+		}
+		i++;
+	}
+	va_end(args);
+	buffer[len] = '\0';
 
-    	while (format[i])
-    	{
-        	if (format[i] == '%')
-        	{
-            		j = handle_format_specifier(format, i + 1, &args, buffer);
-            		if (j == -1)
-                		return (-1);
-            		len += j;
-            		i++;
-        	}
-        	else
-        	{
-            		buffer[len++] = format[i];
-        	}
-        	i++;
-    	}
-
-    	va_end(args);
-
-    	buffer[len] = '\0';
-
-   	return (len);
+	return (len);
 }
+
 /**
  * handle_format_specifier - Handles a format specifier.
  *
@@ -53,7 +51,9 @@ int _printf(const char *format, ...)
  *
  * Return: The number of characters added to buffer, or -1 on error.
  */
-int handle_format_specifier(const char *format, int pos, va_list *args, char *buffer)
+
+int handle_format_specifier(const char *format, int pos, va_list *args,
+		char *buffer)
 {
 	int num_char;
 
@@ -74,7 +74,7 @@ int handle_format_specifier(const char *format, int pos, va_list *args, char *bu
 			num_char = 1;
 			break;
 		default:
-			// unknown spec
+			/* unknown spec */
 			break;
 	}
 

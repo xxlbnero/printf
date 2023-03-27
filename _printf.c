@@ -1,77 +1,110 @@
 #include "main.h"
-
+void print_buffer(char buffer[], int *buff_ind);
 /**
- * _printf - Prints output according to a format.
- *
- * @format: A string containing zero or more directives to print.
- * @...: Variable arguments to be printed according to format.
- *
- * Return: The number of characters printed.
+ * _printf - Printf function
+ * @format: format.
+ * Return: Printed chars.
  */
 int _printf(const char *format, ...)
+
 {
-    /* TODO: Implement the printf function. */
-    return (0);
+
+int i, printed = 0, printed_chars = 0;
+
+int flags, width, precision, size, buff_ind = 0;
+
+va_list list;
+
+char buffer[BUFF_SIZE];
+
+if (format == NULL)
+
+return (-1);
+
+va_start(list, format);
+
+for (i = 0; format && format[i] != '\0'; i++)
+
+{
+
+if (format[i] != '%')
+
+{
+
+buffer[buff_ind++] = format[i];
+
+if (buff_ind == BUFF_SIZE)
+
+print_buffer(buffer, &buff_ind);
+
+/* write(1, &format[i], 1);*/
+
+printed_chars++;
+
 }
-#include "main.h"
-#include <stdarg.h>
+
+else
+
+{
+
+print_buffer(buffer, &buff_ind);
+
+flags = get_flags(format, &i);
+
+width = get_width(format, &i, list);
+
+precision = get_precision(format, &i, list);
+
+size = get_size(format, &i);
+
+++i;
+
+printed = handle_print(format, &i, list, buffer,
+
+flags, width, precision, size);
+
+if (printed == -1)
+
+return (-1);
+
+printed_chars += printed;
+
+}
+
+}
+
+
+
+print_buffer(buffer, &buff_ind);
+
+
+
+va_end(list);
+
+
+
+return (printed_chars);
+
+}
+
+
 
 /**
- * _printf - Prints output according to a format.
- *
- * @format: A string containing zero or more directives to print.
- * @...: Variable arguments to be printed according to format.
- *
- * Return: The number of characters printed.
+ * print_buffer - Prints the contents of the buffer if it exist
+ * @buffer: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
  */
-int _printf(const char *format, ...)
+
+void print_buffer(char buffer[], int *buff_ind)
+
 {
-    int i = 0, j = 0, len = 0;
-    va_list args;
-    char buffer[1024];
 
-    if (format == NULL)
-        return (-1);
+if (*buff_ind > 0)
 
-    va_start(args, format);
+write(1, &buffer[0], *buff_ind);
 
-    while (format[i])
-    {
-        if (format[i] == '%')
-        {
-            j = handle_format_specifier(format, i + 1, &args, buffer);
-            if (j == -1)
-                return (-1);
-            len += j;
-            i++;
-        }
-        else
-        {
-            buffer[len++] = format[i];
-        }
-        i++;
-    }
 
-    va_end(args);
 
-    buffer[len] = '\0';
+*buff_ind = 0;
 
-    /* TODO: Print the buffer to the console. */
-
-    return (len);
-}
-/**
- * handle_format_specifier - Handles a format specifier.
- *
- * @format: A string containing the format specifier.
- * @pos: The position of the format specifier in the format string.
- * @args: The variable arguments to be printed according to format.
- * @buffer: The buffer to store the resulting string.
- *
- * Return: The number of characters added to buffer, or -1 on error.
- */
-int handle_format_specifier(const char *format, int pos, va_list *args, char *buffer)
-{
-    /* TODO: Implement the handle_format_specifier function. */
-    return (0);
 }
